@@ -11,12 +11,15 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 import com.ifpr.androidapptemplate.R
+import com.ifpr.androidapptemplate.model.User
 
 
 class CadastroUsuarioActivity  : AppCompatActivity() {
     private lateinit var textCadastroUsuarioTitle: TextView
     private lateinit var registerNameEditText: EditText
+    private lateinit var registerPhoneEditText: EditText
     private lateinit var registerEmailEditText: EditText
     private lateinit var registerPasswordEditText: EditText
     private lateinit var registerConfirmPasswordEditText: EditText
@@ -32,8 +35,12 @@ class CadastroUsuarioActivity  : AppCompatActivity() {
         // Inicializa o Firebase Auth
         auth = FirebaseAuth.getInstance()
 
+        // Inicializa o Firebase Database
+        database = FirebaseDatabase.getInstance().reference
+
         textCadastroUsuarioTitle = findViewById(R.id.textCadastroUsuarioTitle)
         registerNameEditText = findViewById(R.id.registerNameEditText)
+        registerPhoneEditText = findViewById(R.id.registerPhoneEditText)
         registerEmailEditText = findViewById(R.id.registerEmailEditText)
         registerPasswordEditText = findViewById(R.id.registerPasswordEditText)
         registerConfirmPasswordEditText = findViewById(R.id.registerConfirmPasswordEditText)
