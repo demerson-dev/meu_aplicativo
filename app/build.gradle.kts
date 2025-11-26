@@ -1,8 +1,6 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-
-    // Add the Google services Gradle plugin
     id("com.google.gms.google-services")
 }
 
@@ -52,22 +50,15 @@ dependencies {
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
 
-    // Import the Firebase BoM
-    implementation(platform(libs.firebase.bom))
-
-    // Firebase dependencies - When using the BoM, don't specify versions in Firebase dependencies
     implementation(libs.firebase.auth.ktx)
-    implementation(libs.firebase.auth)
     implementation(libs.firebase.common.ktx)
     implementation(libs.firebase.database.ktx)
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.auth)
     implementation(libs.firebase.storage.ktx)
+    implementation(libs.play.services.auth)
     implementation(libs.firebase.firestore.ktx)
     implementation(libs.firebase.crashlytics.buildtools)
-
-    // Add Firebase Analytics
-    implementation(libs.firebase.analytics)
-
-    implementation(libs.play.services.auth)
 
     implementation(libs.jetbrains.kotlinx.coroutines.core)
     implementation(libs.kotlinx.coroutines.android)
