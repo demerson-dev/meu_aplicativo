@@ -1,7 +1,15 @@
 <resources>
+    <!-- Nome do aplicativo -->
     <string name="app_name">AndroidAppTemplate</string>
+
+    <!-- Títulos da navegação principal -->
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
     <string name="title_profile">Profile</string>
+
+    <!-- Web Client ID para autenticação do Google Sign-In -->
+    <!-- Este valor é gerado automaticamente pelo Firebase -->
+    <!-- Não altere este valor manualmente -->
+    <string name="default_web_client_id" translatable="false">1001820138000-o9ff8765tqmbi2jn3utmph32l7o4f11o.apps.googleusercontent.com</string>
 </resources>
