@@ -60,11 +60,12 @@ class CadastroUsuarioActivity  : AppCompatActivity() {
 
     private fun createAccount() {
         val name = registerNameEditText.text.toString().trim()
+        val phone = registerPhoneEditText.text.toString().trim()
         val email = registerEmailEditText.text.toString().trim()
         val password = registerPasswordEditText.text.toString().trim()
         val confirmPassword = registerConfirmPasswordEditText.text.toString().trim()
 
-        if (name.isEmpty() || email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
+        if (name.isEmpty() || phone.isEmpty() || email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
             Toast.makeText(this, "Por favor, preencha todos os campos", Toast.LENGTH_SHORT)
                 .show()
             return
@@ -91,6 +92,7 @@ class CadastroUsuarioActivity  : AppCompatActivity() {
                         ).show()
                         val user = auth.currentUser
                         updateProfile(user, name)
+                        saveUserToDatabase(user, name, email, phone)
                         sendEmailVerification(user)
                     } else {
                         val errorMessage = task.exception?.message ?: "Erro desconhecido"
@@ -112,6 +114,30 @@ class CadastroUsuarioActivity  : AppCompatActivity() {
         }
 
 
+    }
+
+    private fun saveUserToDatabase(firebaseUser: FirebaseUser?, name: String, email: String, phone: String) {
+        firebaseUser?.let { user ->
+            val userData = User(
+                uid = user.uid,
+                name = name,
+                email = email,
+                phone = phone
+            )
+
+            database.child("users").child(user.uid).setValue(userData)
+                .addOnSuccessListener {
+                    Log.d("FirebaseDatabase", "Dados do usuário salvos com sucesso")
+                }
+                .addOnFailureListener { e ->
+                    Log.e("FirebaseDatabase", "Erro ao salvar dados do usuário: ${e.message}")
+                    Toast.makeText(
+                        this,
+                        "Erro ao salvar dados adicionais do usuário",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+        }
     }
 
     private fun sendEmailVerification(user: FirebaseUser?) {

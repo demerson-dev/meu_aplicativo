@@ -26,10 +26,21 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:hint="Nome"
+        android:inputType="textPersonName"
         android:layout_marginTop="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/textCadastroUsuarioTitle"/>
+
+    <EditText
+        android:id="@+id/registerPhoneEditText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Telefone"
+        android:inputType="phone"
+        app:layout_constraintTop_toBottomOf="@id/registerNameEditText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
     <EditText
         android:id="@+id/registerEmailEditText"
@@ -37,7 +48,7 @@
         android:layout_height="wrap_content"
         android:hint="Email"
         android:inputType="textEmailAddress"
-        app:layout_constraintTop_toBottomOf="@id/registerNameEditText"
+        app:layout_constraintTop_toBottomOf="@id/registerPhoneEditText"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
