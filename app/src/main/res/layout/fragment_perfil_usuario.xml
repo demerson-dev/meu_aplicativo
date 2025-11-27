@@ -1,153 +1,160 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="10dp"
-    tools:context=".ui.usuario.PerfilUsuarioFragment">
+    android:fillViewport="true">
 
-    <TextView
-        android:id="@+id/textCadastroUsuarioTitle"
-        android:layout_width="wrap_content"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="Perfil de Usuário"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:padding="10dp"
+        tools:context=".ui.usuario.PerfilUsuarioFragment">
 
-    <!-- Imagem de perfil do usuário -->
-    <ImageView
-        android:id="@+id/userProfileImageView"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
-        android:layout_marginTop="16dp"
-        android:scaleType="centerCrop"
-        android:background="@android:drawable/ic_menu_camera"
-        app:layout_constraintTop_toBottomOf="@id/textCadastroUsuarioTitle"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:contentDescription="Foto de perfil"/>
+        <TextView
+            android:id="@+id/textCadastroUsuarioTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:text="Perfil de Usuário"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Botão para alterar foto de perfil -->
-    <Button
-        android:id="@+id/changeProfilePhotoButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Alterar Foto"
-        android:layout_marginTop="8dp"
-        app:layout_constraintTop_toBottomOf="@id/userProfileImageView"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        <!-- Imagem de perfil do usuário -->
+        <ImageView
+            android:id="@+id/userProfileImageView"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_marginTop="16dp"
+            android:scaleType="centerCrop"
+            android:background="@android:drawable/ic_menu_camera"
+            app:layout_constraintTop_toBottomOf="@id/textCadastroUsuarioTitle"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:contentDescription="Foto de perfil"/>
 
-    <!-- Campo de nome do usuário -->
-    <EditText
-        android:id="@+id/registerNameEditText"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:hint="Nome"
-        android:layout_marginTop="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/changeProfilePhotoButton"/>
+        <!-- Botão para alterar foto de perfil -->
+        <Button
+            android:id="@+id/changeProfilePhotoButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Alterar Foto"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@id/userProfileImageView"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
 
-    <!-- Campo de email do usuário -->
-    <EditText
-        android:id="@+id/registerEmailEditText"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:hint="Email"
-        android:inputType="textEmailAddress"
-        android:layout_marginTop="8dp"
-        app:layout_constraintTop_toBottomOf="@id/registerNameEditText"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        <!-- Campo de nome do usuário -->
+        <EditText
+            android:id="@+id/registerNameEditText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="Nome"
+            android:layout_marginTop="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/changeProfilePhotoButton"/>
 
-    <!-- Campo de data de nascimento -->
-    <EditText
-        android:id="@+id/registerBirthDateEditText"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:hint="Data de Nascimento (dd/mm/aaaa)"
-        android:inputType="date"
-        android:layout_marginTop="8dp"
-        app:layout_constraintTop_toBottomOf="@id/registerEmailEditText"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        <!-- Campo de email do usuário -->
+        <EditText
+            android:id="@+id/registerEmailEditText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="Email"
+            android:inputType="textEmailAddress"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@id/registerNameEditText"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
 
-    <!-- Campo de CEP -->
-    <EditText
-        android:id="@+id/registerCepEditText"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:hint="CEP"
-        android:inputType="number"
-        android:maxLength="8"
-        android:layout_marginTop="8dp"
-        app:layout_constraintTop_toBottomOf="@id/registerBirthDateEditText"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        <!-- Campo de data de nascimento -->
+        <EditText
+            android:id="@+id/registerBirthDateEditText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="Data de Nascimento (dd/mm/aaaa)"
+            android:inputType="number"
+            android:maxLength="10"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@id/registerEmailEditText"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
 
-    <!-- Campo de endereço -->
-    <EditText
-        android:id="@+id/registerEnderecoEditText"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:hint="Endereço"
-        android:layout_marginTop="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/registerCepEditText" />
+        <!-- Campo de CEP -->
+        <EditText
+            android:id="@+id/registerCepEditText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="CEP"
+            android:inputType="number"
+            android:maxLength="8"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@id/registerBirthDateEditText"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
 
-    <!-- Campo de senha (oculto quando usuário está logado) -->
-    <EditText
-        android:id="@+id/registerPasswordEditText"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:hint="Senha"
-        android:inputType="textPassword"
-        android:layout_marginTop="8dp"
-        app:layout_constraintTop_toBottomOf="@id/registerEnderecoEditText"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        <!-- Campo de endereço -->
+        <EditText
+            android:id="@+id/registerEnderecoEditText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="Endereço"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/registerCepEditText" />
 
-    <!-- Campo de confirmar senha (oculto quando usuário está logado) -->
-    <EditText
-        android:id="@+id/registerConfirmPasswordEditText"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:hint="Confirmar Senha"
-        android:inputType="textPassword"
-        android:layout_marginTop="8dp"
-        app:layout_constraintTop_toBottomOf="@id/registerPasswordEditText"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        <!-- Campo de senha (oculto quando usuário está logado) -->
+        <EditText
+            android:id="@+id/registerPasswordEditText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="Senha"
+            android:inputType="textPassword"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@id/registerEnderecoEditText"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
 
-    <!-- Botão para salvar/atualizar dados -->
-    <Button
-        android:id="@+id/salvarButton"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Atualizar"
-        android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@id/registerConfirmPasswordEditText"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        <!-- Campo de confirmar senha (oculto quando usuário está logado) -->
+        <EditText
+            android:id="@+id/registerConfirmPasswordEditText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="Confirmar Senha"
+            android:inputType="textPassword"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@id/registerPasswordEditText"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
 
-    <!-- Botão para sair/logout -->
-    <Button
-        android:id="@+id/sairButton"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Sair"
-        android:layout_marginTop="8dp"
-        app:layout_constraintTop_toBottomOf="@id/salvarButton"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        <!-- Botão para salvar/atualizar dados -->
+        <Button
+            android:id="@+id/salvarButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Atualizar"
+            android:layout_marginTop="16dp"
+            app:layout_constraintTop_toBottomOf="@id/registerConfirmPasswordEditText"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
 
+        <!-- Botão para sair/logout -->
+        <Button
+            android:id="@+id/sairButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Sair"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="24dp"
+            app:layout_constraintTop_toBottomOf="@id/salvarButton"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

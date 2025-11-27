@@ -6,7 +6,7 @@
     <string name="title_home">Lista de Treinos</string>
     <string name="title_dashboard">Criar Treino</string>
     <string name="title_notifications">Detalhes do Treino</string>
-    <string name="title_profile">Profile</string>
+    <string name="title_profile">Perfil</string>
 
     <!-- Strings para tela de lista de treinos -->
     <string name="treino_peito">Treino de Peito</string>

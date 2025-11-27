@@ -12,6 +12,8 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Base64
 import android.util.Log
 import android.view.LayoutInflater
@@ -199,6 +201,9 @@ class PerfilUsuarioFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // Configura formatação automática de data
+        setupDateFormatting()
+
         // Exibe os dados do usuário logado, se disponível
         val userFirebase = auth.currentUser
         if(userFirebase != null){
@@ -207,6 +212,46 @@ class PerfilUsuarioFragment : Fragment() {
 
             recuperarDadosUsuario(userFirebase.uid)
         }
+    }
+
+    /**
+     * Configura formatação automática de data (dd/mm/aaaa)
+     */
+    private fun setupDateFormatting() {
+        registerBirthDateEditText.addTextChangedListener(object : TextWatcher {
+            private var isUpdating = false
+            private val mask = "##/##/####"
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+            override fun afterTextChanged(editable: Editable?) {
+                if (isUpdating) return
+
+                isUpdating = true
+
+                // Remove caracteres não numéricos
+                val unmasked = editable.toString().replace("[^\\d]".toRegex(), "")
+
+                // Aplica a máscara
+                val formatted = StringBuilder()
+                var i = 0
+                for (m in mask.toCharArray()) {
+                    if (m != '#' && unmasked.length > i) {
+                        formatted.append(m)
+                        continue
+                    }
+                    if (i >= unmasked.length) break
+                    formatted.append(unmasked[i])
+                    i++
+                }
+
+                editable?.replace(0, editable.length, formatted.toString())
+
+                isUpdating = false
+            }
+        })
     }
 
     /**
@@ -570,16 +615,44 @@ class PerfilUsuarioFragment : Fragment() {
             }
     }
 
+    /**
+     * Salva os dados do usuário no Firebase Database preservando a foto
+     */
     private fun saveUserToDatabase(usuario: Usuario) {
         if (usuario.key != null) {
-            usersReference.child(usuario.key.toString()).setValue(usuario)
-                .addOnSuccessListener {
-                    Toast.makeText(context, "Usuario atualizado com sucesso!", Toast.LENGTH_SHORT)
-                        .show()
-                    requireActivity().supportFragmentManager.popBackStack()
+            // Primeiro busca os dados existentes para preservar a foto
+            usersReference.child(usuario.key.toString()).get()
+                .addOnSuccessListener { snapshot ->
+                    val usuarioExistente = snapshot.getValue(Usuario::class.java)
+
+                    // Preserva a foto existente se houver
+                    if (usuarioExistente?.photoUrl != null) {
+                        usuario.photoUrl = usuarioExistente.photoUrl
+                    }
+
+                    // Agora salva com a foto preservada
+                    usersReference.child(usuario.key.toString()).setValue(usuario)
+                        .addOnSuccessListener {
+                            Log.d("SaveUser", "Usuário atualizado com sucesso! Foto preservada.")
+                            Toast.makeText(context, "Usuario atualizado com sucesso!", Toast.LENGTH_SHORT).show()
+                            requireActivity().supportFragmentManager.popBackStack()
+                        }
+                        .addOnFailureListener { exception ->
+                            Log.e("SaveUser", "Falha ao atualizar o usuario", exception)
+                            Toast.makeText(context, "Falha ao atualizar o usuario", Toast.LENGTH_SHORT).show()
+                        }
                 }
-                .addOnFailureListener {
-                    Toast.makeText(context, "Falha ao atualizar o usuario", Toast.LENGTH_SHORT).show()
+                .addOnFailureListener { exception ->
+                    Log.e("SaveUser", "Erro ao recuperar dados existentes", exception)
+                    // Se falhar ao buscar, salva assim mesmo (mas sem foto)
+                    usersReference.child(usuario.key.toString()).setValue(usuario)
+                        .addOnSuccessListener {
+                            Toast.makeText(context, "Usuario atualizado!", Toast.LENGTH_SHORT).show()
+                            requireActivity().supportFragmentManager.popBackStack()
+                        }
+                        .addOnFailureListener {
+                            Toast.makeText(context, "Falha ao atualizar o usuario", Toast.LENGTH_SHORT).show()
+                        }
                 }
         } else {
             Toast.makeText(context, "ID invalido", Toast.LENGTH_SHORT).show()

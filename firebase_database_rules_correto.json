@@ -1,0 +1,61 @@
+{
+  "rules": {
+    "users": {
+      "$uid": {
+        ".read": "$uid === auth.uid",
+        ".write": "$uid === auth.uid",
+        ".validate": "newData.hasChildren(['key', 'nome', 'email'])",
+        "key": {
+          ".validate": "newData.val() === $uid"
+        },
+        "nome": {
+          ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 100"
+        },
+        "email": {
+          ".validate": "newData.isString() && newData.val().matches(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,}$/i)"
+        },
+        "endereco": {
+          ".validate": "newData.isString() && newData.val().length <= 200"
+        },
+        "cep": {
+          ".validate": "newData.isString() && newData.val().length <= 8"
+        },
+        "dataNascimento": {
+          ".validate": "newData.isString() && newData.val().matches(/^\\d{2}\\/\\d{2}\\/\\d{4}$/)"
+        },
+        "photoUrl": {
+          ".validate": "newData.isString()"
+        }
+      }
+    },
+    "treinos": {
+      "$treinoId": {
+        ".read": "auth != null && data.child('userId').val() === auth.uid",
+        ".write": "auth != null && (!data.exists() || data.child('userId').val() === auth.uid) && newData.child('userId').val() === auth.uid",
+        ".validate": "newData.hasChildren(['key', 'userId', 'nomeTreino', 'exercicios', 'series', 'repeticoes'])",
+        "key": {
+          ".validate": "newData.val() === $treinoId"
+        },
+        "userId": {
+          ".validate": "newData.val() === auth.uid"
+        },
+        "nomeTreino": {
+          ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 100"
+        },
+        "exercicios": {
+          ".validate": "newData.isString() && newData.val().length > 0"
+        },
+        "series": {
+          ".validate": "newData.isNumber() && newData.val() > 0 && newData.val() <= 100"
+        },
+        "repeticoes": {
+          ".validate": "newData.isNumber() && newData.val() > 0 && newData.val() <= 1000"
+        },
+        "observacoes": {
+          ".validate": "newData.isString()"
+        }
+      }
+    }
+  }
+}
+
