@@ -1,1 +1,18 @@
 
+{
+  "rules": {
+    "users": {
+      "$uid": {
+        ".read": "auth != null && $uid === auth.uid",
+        ".write": "auth != null && $uid === auth.uid"
+      }
+    },
+    "treinos": {
+      ".read": "auth != null",
+      ".write": "auth != null",
+      "$treinoId": {
+        ".validate": "newData.hasChildren(['key', 'userId']) && newData.child('userId').val() === auth.uid"
+      }
+    }
+  }
+}
