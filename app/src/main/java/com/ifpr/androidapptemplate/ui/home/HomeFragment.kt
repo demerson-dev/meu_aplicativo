@@ -92,18 +92,19 @@ class HomeFragment : Fragment() {
 
         Log.d("ListaTreinos", "Carregando treinos do usuário: ${user.uid}")
 
-        // Query para buscar apenas os treinos do usuário atual
-        val query = treinosReference.orderByChild("userId").equalTo(user.uid)
-
-        query.addValueEventListener(object : ValueEventListener {
+        // Busca todos os treinos e filtra pelo userId
+        treinosReference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val treinos = mutableListOf<Treino>()
 
                 for (treinoSnapshot in snapshot.children) {
                     val treino = treinoSnapshot.getValue(Treino::class.java)
+                    // Filtra apenas os treinos do usuário atual
                     treino?.let {
-                        treinos.add(it)
-                        Log.d("ListaTreinos", "Treino carregado: ${it.nomeTreino}")
+                        if (it.userId == user.uid) {
+                            treinos.add(it)
+                            Log.d("ListaTreinos", "Treino carregado: ${it.nomeTreino}")
+                        }
                     }
                 }
 

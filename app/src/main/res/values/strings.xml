@@ -1,6 +1,6 @@
 <resources>
     <!-- Nome do aplicativo -->
-    <string name="app_name">Meu App de Treinos</string>
+    <string name="app_name">FitMax</string>
 
     <!-- Títulos da navegação principal -->
     <string name="title_home">Lista de Treinos</string>
@@ -41,6 +41,14 @@
     <string name="btn_excluir">Excluir</string>
     <string name="treino_excluido_sucesso">Treino excluído com sucesso!</string>
     <string name="erro_excluir_treino">Erro ao excluir treino</string>
+
+    <!-- Strings para tela de login -->
+    <string name="bem_vindo_fitmax">BEM VINDO AO FITMAX</string>
+    <string name="hint_email">Email</string>
+    <string name="hint_senha">Senha</string>
+    <string name="btn_login">Login</string>
+    <string name="link_cadastro">Cadastre-se</string>
+    <string name="logo_description">Logo FitMax</string>
 
     <!-- Web Client ID para autenticação do Google Sign-In -->
     <!-- Este valor é gerado automaticamente pelo Firebase -->

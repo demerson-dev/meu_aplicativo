@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="200dp"
+    android:height="200dp"
+    android:viewportWidth="1024"
+    android:viewportHeight="1024">
+
+    <!-- Fundo escuro do círculo -->
+    <path
+        android:fillColor="#1a1d23"
+        android:pathData="M512,512m-480,0a480,480 0,1,1 960,0a480,480 0,1,1 -960,0"/>
+
+    <!-- Círculo com borda verde externa mais clara -->
+    <path
+        android:strokeColor="#5dff6f"
+        android:strokeWidth="8"
+        android:fillColor="#00000000"
+        android:pathData="M512,512m-450,0a450,450 0,1,1 900,0a450,450 0,1,1 -900,0"/>
+
+    <!-- Círculo com borda verde interna mais escura -->
+    <path
+        android:strokeColor="#2d6e35"
+        android:strokeWidth="6"
+        android:fillColor="#00000000"
+        android:pathData="M512,512m-440,0a440,440 0,1,1 880,0a440,440 0,1,1 -880,0"/>
+
+    <!-- Braço do bíceps - forma principal -->
+    <!-- Antebraço esquerdo com circuito -->
+    <path
+        android:strokeColor="#3fff50"
+        android:strokeWidth="6"
+        android:fillColor="#00000000"
+        android:strokeLineCap="round"
+        android:pathData="M380,450 L320,480 Q300,495 290,520"/>
+
+    <path
+        android:strokeColor="#3fff50"
+        android:strokeWidth="5"
+        android:fillColor="#00000000"
+        android:strokeLineCap="round"
+        android:pathData="M390,455 L335,485 Q320,495 310,515"/>
+
+    <!-- Mão/punho esquerdo -->
+    <path
+        android:fillColor="#3fff50"
+        android:pathData="M280,510 Q270,505 265,515 L265,530 Q270,540 280,535 L295,528 Q300,520 295,512 Z"/>
+
+    <!-- Nós de circuito no antebraço esquerdo -->
+    <path
+        android:fillColor="#b4ffb8"
+        android:pathData="M350,465 m-5,0 a5,5 0,1,1 10,0 a5,5 0,1,1 -10,0"/>
+    <path
+        android:fillColor="#b4ffb8"
+        android:pathData="M330,475 m-5,0 a5,5 0,1,1 10,0 a5,5 0,1,1 -10,0"/>
+    <path
+        android:fillColor="#b4ffb8"
+        android:pathData="M310,490 m-5,0 a5,5 0,1,1 10,0 a5,5 0,1,1 -10,0"/>
+
+    <!-- Linhas de conexão do circuito no antebraço -->
+    <path
+        android:strokeColor="#5dff6f"
+        android:strokeWidth="2"
+        android:fillColor="#00000000"
+        android:pathData="M350,465 L340,470 M330,475 L325,480 M310,490 L305,495"/>
+
+    <!-- Bíceps principal - parte superior -->
+    <path
+        android:fillColor="#3fff50"
+        android:pathData="M380,450 Q420,360 470,390 Q510,420 510,470 Q510,510 470,530 Q430,545 395,515 Q370,485 380,450 Z"/>
+
+    <!-- Sombra/profundidade do bíceps -->
+    <path
+        android:fillColor="#2d8f3a"
+        android:pathData="M395,460 Q420,390 460,410 Q490,435 490,475 Q490,505 465,520 Q435,530 410,510 Q390,490 395,460 Z"/>
+
+    <!-- Nós de circuito no bíceps -->
+    <path
+        android:fillColor="#b4ffb8"
+        android:pathData="M430,420 m-6,0 a6,6 0,1,1 12,0 a6,6 0,1,1 -12,0"/>
+    <path
+        android:fillColor="#b4ffb8"
+        android:pathData="M445,440 m-6,0 a6,6 0,1,1 12,0 a6,6 0,1,1 -12,0"/>
+    <path
+        android:fillColor="#b4ffb8"
+        android:pathData="M455,470 m-6,0 a6,6 0,1,1 12,0 a6,6 0,1,1 -12,0"/>
+
+    <!-- Linhas de circuito no bíceps -->
+    <path
+        android:strokeColor="#5dff6f"
+        android:strokeWidth="2.5"
+        android:fillColor="#00000000"
+        android:pathData="M430,420 L435,430 L445,440 M445,440 L450,455 L455,470"/>
+
+    <!-- Detalhes de circuito cruzado -->
+    <path
+        android:strokeColor="#5dff6f"
+        android:strokeWidth="2"
+        android:fillColor="#00000000"
+        android:pathData="M420,435 L415,445 M425,445 L430,435"/>
+
+    <!-- Antebraço direito -->
+    <path
+        android:strokeColor="#3fff50"
+        android:strokeWidth="6"
+        android:fillColor="#00000000"
+        android:strokeLineCap="round"
+        android:pathData="M470,390 L540,350 Q570,335 600,330"/>
+
+    <path
+        android:strokeColor="#3fff50"
+        android:strokeWidth="5"
+        android:fillColor="#00000000"
+        android:strokeLineCap="round"
+        android:pathData="M475,395 L535,360 Q560,348 585,343"/>
+
+    <!-- Ombro direito -->
+    <path
+        android:fillColor="#3fff50"
+        android:pathData="M600,320 Q610,310 620,320 L630,330 Q635,345 625,350 L610,355 Q600,350 595,340 Z"/>
+
+    <!-- Nós no antebraço direito -->
+    <path
+        android:fillColor="#b4ffb8"
+        android:pathData="M510,370 m-5,0 a5,5 0,1,1 10,0 a5,5 0,1,1 -10,0"/>
+    <path
+        android:fillColor="#b4ffb8"
+        android:pathData="M540,350 m-5,0 a5,5 0,1,1 10,0 a5,5 0,1,1 -10,0"/>
+    <path
+        android:fillColor="#b4ffb8"
+        android:pathData="M570,338 m-5,0 a5,5 0,1,1 10,0 a5,5 0,1,1 -10,0"/>
+
+    <!-- Linhas de circuito no antebraço direito -->
+    <path
+        android:strokeColor="#5dff6f"
+        android:strokeWidth="2"
+        android:fillColor="#00000000"
+        android:pathData="M510,370 L515,365 M540,350 L545,345 M570,338 L575,333"/>
+
+    <!-- Texto FitMax -->
+    <path
+        android:fillColor="#4eff5e"
+        android:pathData="M270,650 L270,730 M270,650 L330,650 L330,670 L290,670 M270,690 L320,690 L320,710 L290,710"/>
+
+    <path
+        android:fillColor="#4eff5e"
+        android:pathData="M350,670 L350,730 M350,670 L360,670 L360,730 M360,670 L370,670 L370,730"/>
+
+    <path
+        android:fillColor="#4eff5e"
+        android:pathData="M390,680 L390,730 M390,680 L400,680 L400,710 M400,710 L410,730 M400,710 L420,710 L420,730 M420,710 L430,730 M420,710 L440,710 L440,730 M440,680 L440,710"/>
+
+    <path
+        android:fillColor="#4eff5e"
+        android:pathData="M460,680 L460,730 M460,680 L490,680 M490,680 L490,710 M490,710 L460,730"/>
+
+    <path
+        android:fillColor="#4eff5e"
+        android:pathData="M510,680 L510,730 M510,695 L540,695 M540,680 L540,715 M540,715 L520,730"/>
+
+    <!-- Checkmark -->
+    <path
+        android:strokeColor="#4eff5e"
+        android:strokeWidth="12"
+        android:strokeLineCap="round"
+        android:fillColor="#00000000"
+        android:pathData="M700,660 L720,685 L760,640"/>
+</vector>
+
