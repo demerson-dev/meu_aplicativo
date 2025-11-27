@@ -23,11 +23,17 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.UserProfileChangeRequest
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.ifpr.androidapptemplate.R
+import com.ifpr.androidapptemplate.baseclasses.Usuario
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
@@ -46,7 +52,12 @@ class PerfilUsuarioFragment : Fragment() {
     private lateinit var registerEmailEditText: EditText
     private lateinit var registerBirthDateEditText: EditText
     private lateinit var registerCepEditText: EditText
+    private lateinit var registerEnderecoEditText: EditText
+    private lateinit var registerPasswordEditText: EditText
+    private lateinit var registerConfirmPasswordEditText: EditText
     private lateinit var changeProfilePhotoButton: Button
+    private lateinit var registerButton: Button
+    private lateinit var sairButton: Button
 
     // Referências do Firebase
     private lateinit var usersReference: DatabaseReference
@@ -126,7 +137,12 @@ class PerfilUsuarioFragment : Fragment() {
         registerEmailEditText = view.findViewById(R.id.registerEmailEditText)
         registerBirthDateEditText = view.findViewById(R.id.registerBirthDateEditText)
         registerCepEditText = view.findViewById(R.id.registerCepEditText)
+        registerEnderecoEditText = view.findViewById(R.id.registerEnderecoEditText)
+        registerPasswordEditText = view.findViewById(R.id.registerPasswordEditText)
+        registerConfirmPasswordEditText = view.findViewById(R.id.registerConfirmPasswordEditText)
         changeProfilePhotoButton = view.findViewById(R.id.changeProfilePhotoButton)
+        registerButton = view.findViewById(R.id.salvarButton)
+        sairButton = view.findViewById(R.id.sairButton)
 
         // Configura o clique no botão de alterar foto
         changeProfilePhotoButton.setOnClickListener {
@@ -145,6 +161,11 @@ class PerfilUsuarioFragment : Fragment() {
         val user = auth.currentUser
 
         if (user != null) {
+            // Mostra botão de sair e oculta campos de senha
+            sairButton.visibility = View.VISIBLE
+            registerPasswordEditText.visibility = View.GONE
+            registerConfirmPasswordEditText.visibility = View.GONE
+
             // Desabilita a edição do e-mail
             registerEmailEditText.isEnabled = false
 
@@ -163,6 +184,14 @@ class PerfilUsuarioFragment : Fragment() {
             */
         }
 
+        registerButton.setOnClickListener {
+            updateUser()
+        }
+
+        sairButton.setOnClickListener {
+            signOut()
+        }
+
         return view
     }
 
@@ -175,6 +204,8 @@ class PerfilUsuarioFragment : Fragment() {
         if(userFirebase != null){
             registerNameEditText.setText(userFirebase.displayName)
             registerEmailEditText.setText(userFirebase.email)
+
+            recuperarDadosUsuario(userFirebase.uid)
         }
     }
 
@@ -330,5 +361,89 @@ class PerfilUsuarioFragment : Fragment() {
                 Log.e("UpdatePhoto", "Erro ao atualizar foto no banco de dados", exception)
                 Toast.makeText(context, "Erro ao atualizar foto de perfil", Toast.LENGTH_SHORT).show()
             }
+    }
+
+
+    fun recuperarDadosUsuario(usuarioKey: String) {
+        val databaseReference = FirebaseDatabase.getInstance().getReference("users")
+
+        databaseReference.child(usuarioKey).addListenerForSingleValueEvent(object :
+            ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.exists()) {
+                    val usuario = snapshot.getValue(Usuario::class.java)
+                    usuario?.let {
+                        registerEnderecoEditText.setText(it.endereco ?: "")
+                    }
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.e("FirebaseError", "Erro ao recuperar dados: ${error.message}")
+            }
+        })
+    }
+
+    private fun updateUser() {
+        val name = registerNameEditText.text.toString().trim()
+        val endereco = registerEnderecoEditText.text.toString().trim()
+
+        // Acessar currentUser
+        val user = auth.currentUser
+
+        // Verifica se o usuário atual já está definido
+        if (user != null) {
+            // Se o usuário já existe, atualiza os dados
+            updateProfile(user, name, endereco)
+        } else {
+            Toast.makeText(context, "Não foi possível encontrar o usuário logado", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun updateProfile(user: FirebaseUser?, displayName: String, endereco: String) {
+        val profileUpdates = UserProfileChangeRequest.Builder()
+            .setDisplayName(displayName)
+            .build()
+
+        val usuario = Usuario(user?.uid.toString() , displayName, user?.email, endereco, )
+
+        user?.updateProfile(profileUpdates)
+            ?.addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    saveUserToDatabase(usuario)
+                    Toast.makeText(context, "Nome do usuario alterado com sucesso.",
+                        Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(context, "Não foi possivel alterar o nome do usuario.",
+                        Toast.LENGTH_SHORT).show()
+                }
+            }
+    }
+
+    private fun saveUserToDatabase(usuario: Usuario) {
+        if (usuario.key != null) {
+            usersReference.child(usuario.key.toString()).setValue(usuario)
+                .addOnSuccessListener {
+                    Toast.makeText(context, "Usuario atualizado com sucesso!", Toast.LENGTH_SHORT)
+                        .show()
+                    requireActivity().supportFragmentManager.popBackStack()
+                }
+                .addOnFailureListener {
+                    Toast.makeText(context, "Falha ao atualizar o usuario", Toast.LENGTH_SHORT).show()
+                }
+        } else {
+            Toast.makeText(context, "ID invalido", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    /**
+     * Faz logout do usuário e retorna para a tela de login
+     */
+    private fun signOut() {
+        auth.signOut()
+        Toast.makeText(context, "Você foi desconectado com sucesso!", Toast.LENGTH_SHORT).show()
+
+        // Retorna para a tela de login
+        activity?.finish()
     }
 }
