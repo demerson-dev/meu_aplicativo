@@ -60,8 +60,7 @@
                 android:layout_height="wrap_content"
                 android:inputType="textMultiLine"
                 android:minLines="4"
-                android:gravity="top|start"
-                android:hint="@string/hint_exercicios" />
+                android:gravity="top|start" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <!-- Campo Séries -->
@@ -119,8 +118,7 @@
                 android:layout_height="wrap_content"
                 android:inputType="textMultiLine"
                 android:minLines="3"
-                android:gravity="top|start"
-                android:hint="@string/hint_observacoes" />
+                android:gravity="top|start" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <!-- Botão Salvar Treino -->

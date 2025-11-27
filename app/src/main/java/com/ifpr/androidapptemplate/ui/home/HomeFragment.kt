@@ -76,14 +76,6 @@ class HomeFragment : Fragment() {
             adapter = treinosAdapter
             layoutManager = LinearLayoutManager(context)
         }
-
-        // Configura clique nos itens
-        treinosAdapter.setOnTreinoClickListener(object : TreinosAdapter.OnTreinoClickListener {
-            override fun onTreinoClick(treino: Treino) {
-                // TODO: Navegar para tela de detalhes do treino
-                Toast.makeText(context, "Treino: ${treino.nomeTreino}", Toast.LENGTH_SHORT).show()
-            }
-        })
     }
 
     /**

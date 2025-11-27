@@ -5,7 +5,7 @@
     <!-- Títulos da navegação principal -->
     <string name="title_home">Lista de Treinos</string>
     <string name="title_dashboard">Criar Treino</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="title_notifications">Detalhes do Treino</string>
     <string name="title_profile">Profile</string>
 
     <!-- Strings para tela de lista de treinos -->
@@ -26,6 +26,21 @@
     <string name="btn_salvar_treino">Salvar Treino</string>
     <string name="hint_exercicios">Digite os exercícios do treino</string>
     <string name="hint_observacoes">Observações adicionais</string>
+
+    <!-- Strings para tela de detalhes do treino -->
+    <string name="title_detalhes_treino">DETALHES DO TREINO</string>
+    <string name="label_nome">Nome:</string>
+    <string name="label_exercicios_lista">Exercícios:</string>
+    <string name="label_series_detalhes">Séries:</string>
+    <string name="label_repeticoes_detalhes">Repetições:</string>
+    <string name="label_observacoes_detalhes">Observações:</string>
+    <string name="btn_excluir_treino">Excluir Treino</string>
+    <string name="confirm_delete_title">Confirmar exclusão</string>
+    <string name="confirm_delete_message">Tem certeza que deseja excluir este treino?</string>
+    <string name="btn_cancelar">Cancelar</string>
+    <string name="btn_excluir">Excluir</string>
+    <string name="treino_excluido_sucesso">Treino excluído com sucesso!</string>
+    <string name="erro_excluir_treino">Erro ao excluir treino</string>
 
     <!-- Web Client ID para autenticação do Google Sign-In -->
     <!-- Este valor é gerado automaticamente pelo Firebase -->
