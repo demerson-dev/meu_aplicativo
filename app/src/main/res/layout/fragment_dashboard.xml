@@ -1,22 +1,139 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fillViewport="true"
     tools:context=".ui.dashboard.DashboardFragment">
 
-    <TextView
-        android:id="@+id/text_dashboard"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:textAlignment="center"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:padding="16dp">
+
+        <!-- Título da tela -->
+        <TextView
+            android:id="@+id/textTitleCriarTreino"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="CRIAR TREINO"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:layout_marginTop="16dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <!-- Campo Nome do Treino -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/inputLayoutNomeTreino"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:hint="@string/label_nome_treino"
+            app:layout_constraintTop_toBottomOf="@id/textTitleCriarTreino"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editNomeTreino"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Campo Exercícios -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/inputLayoutExercicios"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:hint="@string/label_exercicios"
+            app:layout_constraintTop_toBottomOf="@id/inputLayoutNomeTreino"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editExercicios"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textMultiLine"
+                android:minLines="4"
+                android:gravity="top|start"
+                android:hint="@string/hint_exercicios" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Campo Séries -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/inputLayoutSeries"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:hint="@string/label_series"
+            app:layout_constraintTop_toBottomOf="@id/inputLayoutExercicios"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/inputLayoutRepeticoes">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editSeries"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Campo Repetições -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/inputLayoutRepeticoes"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="8dp"
+            android:hint="@string/label_repeticoes"
+            app:layout_constraintTop_toBottomOf="@id/inputLayoutExercicios"
+            app:layout_constraintStart_toEndOf="@id/inputLayoutSeries"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editRepeticoes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Campo Observações -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/inputLayoutObservacoes"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:hint="@string/label_observacoes"
+            app:layout_constraintTop_toBottomOf="@id/inputLayoutSeries"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editObservacoes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textMultiLine"
+                android:minLines="3"
+                android:gravity="top|start"
+                android:hint="@string/hint_observacoes" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Botão Salvar Treino -->
+        <Button
+            android:id="@+id/btnSalvarTreino"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/btn_salvar_treino"
+            android:textSize="16sp"
+            android:layout_marginTop="24dp"
+            app:layout_constraintTop_toBottomOf="@id/inputLayoutObservacoes"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

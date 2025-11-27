@@ -1,12 +1,31 @@
 <resources>
     <!-- Nome do aplicativo -->
-    <string name="app_name">AndroidAppTemplate</string>
+    <string name="app_name">Meu App de Treinos</string>
 
     <!-- Títulos da navegação principal -->
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
+    <string name="title_home">Lista de Treinos</string>
+    <string name="title_dashboard">Criar Treino</string>
     <string name="title_notifications">Notifications</string>
     <string name="title_profile">Profile</string>
+
+    <!-- Strings para tela de lista de treinos -->
+    <string name="treino_peito">Treino de Peito</string>
+    <string name="treino_peito_dia">Segunda-feira</string>
+    <string name="treino_costas">Treino de Costas</string>
+    <string name="treino_costas_dia">Quarta-feira</string>
+    <string name="treino_pernas">Treino de Pernas</string>
+    <string name="treino_pernas_dia">Sexta-feira</string>
+    <string name="btn_criar_treino">+ Criar treino</string>
+
+    <!-- Strings para tela de criar treino -->
+    <string name="label_nome_treino">Nome do treino</string>
+    <string name="label_exercicios">Exercícios</string>
+    <string name="label_series">Número de séries</string>
+    <string name="label_repeticoes">Número de repetições</string>
+    <string name="label_observacoes">Observações sobre o treino</string>
+    <string name="btn_salvar_treino">Salvar Treino</string>
+    <string name="hint_exercicios">Digite os exercícios do treino</string>
+    <string name="hint_observacoes">Observações adicionais</string>
 
     <!-- Web Client ID para autenticação do Google Sign-In -->
     <!-- Este valor é gerado automaticamente pelo Firebase -->
