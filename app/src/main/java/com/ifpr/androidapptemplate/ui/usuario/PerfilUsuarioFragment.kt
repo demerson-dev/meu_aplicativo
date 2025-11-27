@@ -5,11 +5,14 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
+import android.util.Base64
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -30,10 +33,9 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.StorageReference
 import com.ifpr.androidapptemplate.R
 import com.ifpr.androidapptemplate.baseclasses.Usuario
+import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
@@ -62,7 +64,6 @@ class PerfilUsuarioFragment : Fragment() {
     // Referências do Firebase
     private lateinit var usersReference: DatabaseReference
     private lateinit var auth: FirebaseAuth
-    private lateinit var storageReference: StorageReference
 
     // Variáveis para gerenciar a foto
     private var currentPhotoPath: String? = null
@@ -127,9 +128,8 @@ class PerfilUsuarioFragment : Fragment() {
     ): View {
         val view = inflater.inflate(R.layout.fragment_perfil_usuario, container, false)
 
-        // Inicializa o Firebase Auth e Storage
+        // Inicializa o Firebase Auth
         auth = FirebaseAuth.getInstance()
-        storageReference = FirebaseStorage.getInstance().reference
 
         // Vincula os componentes da interface
         userProfileImageView = view.findViewById(R.id.userProfileImageView)
@@ -316,54 +316,170 @@ class PerfilUsuarioFragment : Fragment() {
     }
 
     /**
-     * Faz upload da foto selecionada para o Firebase Storage
+     * Converte a foto selecionada em Base64 e salva no Firebase Database
      */
     private fun uploadProfilePhoto() {
         val user = auth.currentUser
-        if (user == null || selectedImageUri == null) {
-            Toast.makeText(context, "Erro ao fazer upload da foto", Toast.LENGTH_SHORT).show()
+        if (user == null) {
+            Toast.makeText(context, "Usuário não está logado", Toast.LENGTH_SHORT).show()
+            Log.e("UploadPhoto", "Usuário não está logado")
             return
         }
 
-        // Mostra mensagem de carregamento
-        Toast.makeText(context, "Fazendo upload da foto...", Toast.LENGTH_SHORT).show()
+        if (selectedImageUri == null) {
+            Toast.makeText(context, "Nenhuma foto selecionada", Toast.LENGTH_SHORT).show()
+            Log.e("UploadPhoto", "URI da imagem é nula")
+            return
+        }
 
-        // Cria referência no Storage para a foto do usuário
-        val photoRef = storageReference.child("profile_photos/${user.uid}.jpg")
+        try {
+            // Mostra mensagem de carregamento
+            Toast.makeText(context, "Processando foto...", Toast.LENGTH_SHORT).show()
+            Log.d("UploadPhoto", "Iniciando conversão da foto para Base64")
+            Log.d("UploadPhoto", "URI selecionada: $selectedImageUri")
 
-        // Faz upload da imagem
-        photoRef.putFile(selectedImageUri!!)
-            .addOnSuccessListener {
-                // Upload bem-sucedido, obtém a URL da imagem
-                photoRef.downloadUrl.addOnSuccessListener { uri ->
-                    // Atualiza a URL da foto no perfil do usuário
-                    updateUserPhotoUrl(uri.toString())
+            // Converte a URI em Bitmap
+            val inputStream = requireContext().contentResolver.openInputStream(selectedImageUri!!)
+            val bitmap = BitmapFactory.decodeStream(inputStream)
+            inputStream?.close()
+
+            if (bitmap == null) {
+                Toast.makeText(context, "Não foi possível processar a imagem", Toast.LENGTH_SHORT).show()
+                Log.e("UploadPhoto", "Bitmap é nulo")
+                return
+            }
+
+            Log.d("UploadPhoto", "Bitmap criado: ${bitmap.width}x${bitmap.height}")
+
+            // Redimensiona a imagem para economizar espaço (máximo 800x800)
+            val resizedBitmap = resizeBitmap(bitmap, 800, 800)
+            Log.d("UploadPhoto", "Bitmap redimensionado: ${resizedBitmap.width}x${resizedBitmap.height}")
+
+            // Comprime a imagem para JPEG com qualidade 80%
+            val byteArrayOutputStream = ByteArrayOutputStream()
+            resizedBitmap.compress(Bitmap.CompressFormat.JPEG, 80, byteArrayOutputStream)
+            val imageBytes = byteArrayOutputStream.toByteArray()
+
+            Log.d("UploadPhoto", "Tamanho da imagem: ${imageBytes.size / 1024} KB")
+
+            // Converte para Base64
+            val imageBase64 = Base64.encodeToString(imageBytes, Base64.DEFAULT)
+            Log.d("UploadPhoto", "Conversão para Base64 concluída. Tamanho: ${imageBase64.length} caracteres")
+
+            // Salva a imagem Base64 no perfil do usuário
+            updateUserPhotoBase64(imageBase64)
+
+            // Limpa da memória
+            bitmap.recycle()
+            resizedBitmap.recycle()
+
+        } catch (e: Exception) {
+            Log.e("UploadPhoto", "Exceção ao processar foto", e)
+            Toast.makeText(context, "Erro ao processar foto: ${e.message}", Toast.LENGTH_LONG).show()
+        }
+    }
+
+    /**
+     * Redimensiona um bitmap mantendo a proporção
+     */
+    private fun resizeBitmap(bitmap: Bitmap, maxWidth: Int, maxHeight: Int): Bitmap {
+        val width = bitmap.width
+        val height = bitmap.height
+
+        // Calcula a escala mantendo a proporção
+        val scale = minOf(
+            maxWidth.toFloat() / width,
+            maxHeight.toFloat() / height,
+            1.0f // Não aumenta a imagem se já for menor
+        )
+
+        val newWidth = (width * scale).toInt()
+        val newHeight = (height * scale).toInt()
+
+        return Bitmap.createScaledBitmap(bitmap, newWidth, newHeight, true)
+    }
+
+    /**
+     * Atualiza a foto em Base64 no perfil do usuário no Firebase Database
+     * Preserva os outros dados já existentes
+     */
+    private fun updateUserPhotoBase64(photoBase64: String) {
+        val user = auth.currentUser ?: return
+
+        Log.d("UpdatePhoto", "Salvando foto em Base64 para usuário: ${user.uid}")
+        Log.d("UpdatePhoto", "Tamanho do Base64: ${photoBase64.length} caracteres")
+
+        // Primeiro, recupera os dados existentes do usuário
+        usersReference.child(user.uid).get()
+            .addOnSuccessListener { snapshot ->
+                val usuario = snapshot.getValue(Usuario::class.java)
+
+                if (usuario != null) {
+                    // Atualiza apenas a foto, mantendo os outros dados
+                    usuario.photoUrl = photoBase64
+
+                    // Salva de volta no banco
+                    usersReference.child(user.uid).setValue(usuario)
+                        .addOnSuccessListener {
+                            Log.d("UpdatePhoto", "Foto de perfil salva com sucesso no banco!")
+                            Toast.makeText(context, "Foto de perfil atualizada com sucesso!", Toast.LENGTH_SHORT).show()
+
+                            // Atualiza a visualização da imagem
+                            displayPhotoFromBase64(photoBase64)
+                        }
+                        .addOnFailureListener { exception ->
+                            Log.e("UpdatePhoto", "Erro ao salvar foto no banco de dados", exception)
+                            Toast.makeText(context, "Erro ao salvar foto: ${exception.message}", Toast.LENGTH_SHORT).show()
+                        }
+                } else {
+                    // Se não existe usuário, cria um novo registro apenas com a foto
+                    Log.w("UpdatePhoto", "Usuário não encontrado no banco, salvando apenas photoUrl")
+                    usersReference.child(user.uid).child("photoUrl").setValue(photoBase64)
+                        .addOnSuccessListener {
+                            Log.d("UpdatePhoto", "Foto salva com sucesso!")
+                            Toast.makeText(context, "Foto de perfil atualizada com sucesso!", Toast.LENGTH_SHORT).show()
+                            displayPhotoFromBase64(photoBase64)
+                        }
+                        .addOnFailureListener { exception ->
+                            Log.e("UpdatePhoto", "Erro ao salvar foto no banco de dados", exception)
+                            Toast.makeText(context, "Erro ao salvar foto: ${exception.message}", Toast.LENGTH_SHORT).show()
+                        }
                 }
             }
             .addOnFailureListener { exception ->
-                Log.e("UploadPhoto", "Erro ao fazer upload da foto", exception)
-                Toast.makeText(context, "Erro ao fazer upload da foto", Toast.LENGTH_SHORT).show()
+                Log.e("UpdatePhoto", "Erro ao recuperar dados do usuário", exception)
+                // Tenta salvar apenas a foto mesmo assim
+                usersReference.child(user.uid).child("photoUrl").setValue(photoBase64)
+                    .addOnSuccessListener {
+                        Toast.makeText(context, "Foto de perfil atualizada!", Toast.LENGTH_SHORT).show()
+                        displayPhotoFromBase64(photoBase64)
+                    }
+                    .addOnFailureListener { ex ->
+                        Toast.makeText(context, "Erro ao atualizar foto: ${ex.message}", Toast.LENGTH_SHORT).show()
+                    }
             }
     }
 
     /**
-     * Atualiza a URL da foto no perfil do usuário no Firebase
+     * Exibe a foto a partir de uma string Base64
      */
-    private fun updateUserPhotoUrl(photoUrl: String) {
-        val user = auth.currentUser ?: return
-
-        // Atualiza no Firebase Database
-        usersReference.child(user.uid).child("photoUrl").setValue(photoUrl)
-            .addOnSuccessListener {
-                Toast.makeText(context, "Foto de perfil atualizada com sucesso!", Toast.LENGTH_SHORT).show()
+    private fun displayPhotoFromBase64(photoBase64: String) {
+        try {
+            if (photoBase64.isNotEmpty()) {
+                val decodedBytes = Base64.decode(photoBase64, Base64.DEFAULT)
+                val bitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.size)
+                userProfileImageView.setImageBitmap(bitmap)
+                Log.d("DisplayPhoto", "Foto exibida com sucesso")
             }
-            .addOnFailureListener { exception ->
-                Log.e("UpdatePhoto", "Erro ao atualizar foto no banco de dados", exception)
-                Toast.makeText(context, "Erro ao atualizar foto de perfil", Toast.LENGTH_SHORT).show()
-            }
+        } catch (e: Exception) {
+            Log.e("DisplayPhoto", "Erro ao exibir foto", e)
+        }
     }
 
 
+    /**
+     * Recupera os dados do usuário do Firebase Database
+     */
     fun recuperarDadosUsuario(usuarioKey: String) {
         val databaseReference = FirebaseDatabase.getInstance().getReference("users")
 
@@ -373,7 +489,18 @@ class PerfilUsuarioFragment : Fragment() {
                 if (snapshot.exists()) {
                     val usuario = snapshot.getValue(Usuario::class.java)
                     usuario?.let {
+                        // Preenche todos os campos do usuário
                         registerEnderecoEditText.setText(it.endereco ?: "")
+                        registerCepEditText.setText(it.cep ?: "")
+                        registerBirthDateEditText.setText(it.dataNascimento ?: "")
+
+                        // Carrega e exibe a foto em Base64
+                        if (!it.photoUrl.isNullOrEmpty()) {
+                            Log.d("RecuperarDados", "Carregando foto em Base64")
+                            displayPhotoFromBase64(it.photoUrl!!)
+                        } else {
+                            Log.d("RecuperarDados", "Usuário não possui foto")
+                        }
                     }
                 }
             }
@@ -384,9 +511,20 @@ class PerfilUsuarioFragment : Fragment() {
         })
     }
 
+    /**
+     * Atualiza os dados do usuário
+     */
     private fun updateUser() {
         val name = registerNameEditText.text.toString().trim()
         val endereco = registerEnderecoEditText.text.toString().trim()
+        val cep = registerCepEditText.text.toString().trim()
+        val dataNascimento = registerBirthDateEditText.text.toString().trim()
+
+        // Validação básica
+        if (name.isEmpty()) {
+            Toast.makeText(context, "Por favor, preencha o nome", Toast.LENGTH_SHORT).show()
+            return
+        }
 
         // Acessar currentUser
         val user = auth.currentUser
@@ -394,27 +532,39 @@ class PerfilUsuarioFragment : Fragment() {
         // Verifica se o usuário atual já está definido
         if (user != null) {
             // Se o usuário já existe, atualiza os dados
-            updateProfile(user, name, endereco)
+            updateProfile(user, name, endereco, cep, dataNascimento)
         } else {
             Toast.makeText(context, "Não foi possível encontrar o usuário logado", Toast.LENGTH_SHORT).show()
         }
     }
 
-    private fun updateProfile(user: FirebaseUser?, displayName: String, endereco: String) {
+    /**
+     * Atualiza o perfil do usuário no Firebase
+     */
+    private fun updateProfile(user: FirebaseUser?, displayName: String, endereco: String, cep: String, dataNascimento: String) {
         val profileUpdates = UserProfileChangeRequest.Builder()
             .setDisplayName(displayName)
             .build()
 
-        val usuario = Usuario(user?.uid.toString() , displayName, user?.email, endereco, )
+        // Cria objeto usuário com todos os dados
+        val usuario = Usuario(
+            key = user?.uid.toString(),
+            nome = displayName,
+            email = user?.email,
+            endereco = endereco,
+            cep = cep,
+            dataNascimento = dataNascimento,
+            photoUrl = null // A URL da foto é atualizada separadamente no upload
+        )
 
         user?.updateProfile(profileUpdates)
             ?.addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     saveUserToDatabase(usuario)
-                    Toast.makeText(context, "Nome do usuario alterado com sucesso.",
+                    Toast.makeText(context, "Perfil atualizado com sucesso!",
                         Toast.LENGTH_SHORT).show()
                 } else {
-                    Toast.makeText(context, "Não foi possivel alterar o nome do usuario.",
+                    Toast.makeText(context, "Não foi possível atualizar o perfil.",
                         Toast.LENGTH_SHORT).show()
                 }
             }
