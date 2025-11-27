@@ -2,7 +2,18 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <!-- Permissão para acesso à internet -->
     <uses-permission android:name="android.permission.INTERNET" />
+
+    <!-- Permissão para acessar a câmera -->
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <!-- Permissão para ler arquivos externos (galeria) -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
+
+    <!-- Permissão para ler mídia (Android 13+) -->
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
 
     <application
         android:allowBackup="true"
@@ -25,6 +36,17 @@
         </activity>
         <activity android:name=".MainActivity" />
         <activity android:name=".ui.usuario.CadastroUsuarioActivity" />
+
+        <!-- Provider para compartilhar arquivos da câmera -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
     </application>
 
 </manifest>

@@ -20,17 +20,31 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <!-- Imagem de perfil do usuário -->
     <ImageView
         android:id="@+id/userProfileImageView"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
         android:layout_marginTop="16dp"
+        android:scaleType="centerCrop"
+        android:background="@android:drawable/ic_menu_camera"
         app:layout_constraintTop_toBottomOf="@id/textCadastroUsuarioTitle"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:contentDescription="Foto de perfil"/>
 
+    <!-- Botão para alterar foto de perfil -->
+    <Button
+        android:id="@+id/changeProfilePhotoButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Alterar Foto"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@id/userProfileImageView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
+    <!-- Campo de nome do usuário -->
     <EditText
         android:id="@+id/registerNameEditText"
         android:layout_width="0dp"
@@ -39,15 +53,42 @@
         android:layout_marginTop="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/userProfileImageView"/>
+        app:layout_constraintTop_toBottomOf="@id/changeProfilePhotoButton"/>
 
+    <!-- Campo de email do usuário -->
     <EditText
         android:id="@+id/registerEmailEditText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:hint="Email"
         android:inputType="textEmailAddress"
+        android:layout_marginTop="8dp"
         app:layout_constraintTop_toBottomOf="@id/registerNameEditText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <!-- Campo de data de nascimento -->
+    <EditText
+        android:id="@+id/registerBirthDateEditText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Data de Nascimento (dd/mm/aaaa)"
+        android:inputType="date"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@id/registerEmailEditText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <!-- Campo de CEP -->
+    <EditText
+        android:id="@+id/registerCepEditText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="CEP"
+        android:inputType="number"
+        android:maxLength="8"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@id/registerBirthDateEditText"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
