@@ -10,6 +10,9 @@ O FitMax é uma solução voltada para entusiastas do fitness que desejam ter ma
 FUNCIONALIDADES:
 
 -Criar e gerenciar treinos personalizados;
+
 -Organizar exercícios de forma estruturada;
+
 -Acompanhar progresso e histórico de treinos;
+
 -Acesso seguro e individual aos dados do usuário.
